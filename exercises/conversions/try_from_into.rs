@@ -11,7 +11,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
@@ -26,6 +25,13 @@ struct Color {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = String;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (r, g, b) = tuple;
+        let arr = [r, g, b];
+        if arr.iter().all(|&x| (0..=255).contains(&x)) {
+            Ok(Color{red: r as u8, green: g as u8, blue: b as u8})
+        } else {
+            Err(String::from("Error"))
+        }
     }
 }
 
@@ -33,6 +39,12 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = String;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        if arr.iter().all(|&x| (0..=255).contains(&x)) {
+            let [r, g, b] = arr;
+            Ok(Color{red: r as u8, green: g as u8, blue: b as u8})
+        } else {
+            Err(String::from("Error"))
+        }
     }
 }
 
@@ -40,6 +52,15 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = String;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if (slice.len() == 3) && (slice.iter().all(|&x| (0..=255).contains(&x))) {
+            if let &[r, g, b] = slice {
+                return Ok(Color{red: r as u8, green: g as u8, blue: b as u8});
+            } else {
+                return Err(String::from("Error"));
+            }
+        } else {
+            return Err(String::from("Error"));
+        }
     }
 }
 
